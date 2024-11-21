@@ -5,7 +5,7 @@ function parseFile() {
     const excludeModels = new Set(excludeInput.value.split(',').map(id => id.trim()));
 
     if (!fileInput.files.length) {
-        alert("Please select a file.");
+        alert("Please choose a map file.");
         return;
     }
 
@@ -16,8 +16,8 @@ function parseFile() {
         const fileContent = event.target.result;
         const { luaCode, editedMapContent } = parseMapToLua(fileContent, excludeModels);
 
-        downloadLua(luaCode);
-        downloadMap(editedMapContent);
+        // ZIP-Datei erstellen und herunterladen
+        createAndDownloadZip(luaCode, editedMapContent);
     };
     reader.readAsText(file);
 }
@@ -32,6 +32,7 @@ function parseMapToLua(mapContent, excludeModels) {
     while ((match = objectPattern.exec(mapContent)) !== null) {
         const model = match[1];
 
+        // Überspringe ausgeschlossene Modelle
         if (excludeModels.has(model)) continue;
 
         const posX = match[2];
@@ -46,12 +47,15 @@ function parseMapToLua(mapContent, excludeModels) {
         }
         modelData[model].push([posX, posY, posZ, rotX, rotY, rotZ]);
 
+        // Entfernen der Zeile aus der Map-Datei
         const objectLine = match[0];
         editedMapContent = editedMapContent.replace(objectLine + '\n', '');
     }
 
+    // Modelle nach ID sortieren
     const sortedModels = Object.keys(modelData).sort((a, b) => parseInt(a) - parseInt(b));
 
+    // Lua-Code generieren
     sortedModels.forEach(model => {
         luaCode.push(`    engineStreamingRequestModel(${model})`);
         modelData[model].forEach(coords => {
@@ -64,29 +68,25 @@ function parseMapToLua(mapContent, excludeModels) {
     return { luaCode: luaCode.join("\n"), editedMapContent };
 }
 
-function downloadLua(luaCode) {
+function createAndDownloadZip(luaCode, editedMapContent) {
+    const zip = new JSZip();
 
-    const blob = new Blob([luaCode], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
+    // Lua-Datei hinzufügen
+    zip.file("output.lua", luaCode);
 
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'output.lua';
-    link.click();
+    // Bearbeitete Map-Datei hinzufügen
+    zip.file("edited_map.map", editedMapContent);
 
-
-    URL.revokeObjectURL(url);
-}
-
-function downloadMap(editedMapContent) {
-
-    const blob = new Blob([editedMapContent], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'edited_map.map';
-    link.click();
-
-    URL.revokeObjectURL(url);
+    // ZIP-Datei generieren und herunterladen
+    zip.generateAsync({ type: "blob" })
+        .then(function(content) {
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(content);
+            link.download = "converted_files.zip"; // Name der ZIP-Datei
+            link.click();
+            URL.revokeObjectURL(link.href);
+        })
+        .catch(function(err) {
+            console.error("Fehler beim Erstellen der ZIP-Datei:", err);
+        });
 }
