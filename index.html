@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,17 +8,21 @@
 <body>
     <h1>Convert Map File To DxDrawModel3D</h1>
     
-    <label for="file-upload">Wähle eine Map-Datei:</label>
+    <label for="file-upload">Choose a map file:</label>
     <input type="file" id="file-upload" accept=".map">
     
     <br><br>
     
-    <label for="exclude-models">Modelle ausschließen (IDs, durch Kommas getrennt):</label>
-    <input type="text" id="exclude-models" placeholder="z.B. 8838,8558,3458">
+    <label for="exclude-models">Exclude models (IDs):</label>
+    <input type="text" id="exclude-models" placeholder="e.g. 8838,8558,3458">
     
     <br><br>
     
-    <button onclick="parseFile()">Datei konvertieren</button>
+    <button onclick="parseFile()">Convert</button>
+
+    <br><br>
+
+    <button id="download-button" style="display:none" onclick="downloadLua()">Download lua file</button>
 
     <pre id="output"></pre>
 
