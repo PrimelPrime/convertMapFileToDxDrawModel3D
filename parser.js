@@ -1,3 +1,5 @@
+let luaCodeForDownload = "";
+
 function parseFile() {
     const fileInput = document.getElementById('file-upload');
     const excludeInput = document.getElementById('exclude-models');
@@ -7,7 +9,7 @@ function parseFile() {
     const excludeModels = new Set(excludeInput.value.split(',').map(id => id.trim()));
 
     if (!fileInput.files.length) {
-        alert("Bitte eine Datei auswählen.");
+        alert("Please select a file.");
         return;
     }
 
@@ -16,18 +18,11 @@ function parseFile() {
     const reader = new FileReader();
     reader.onload = function(event) {
         const fileContent = event.target.result;
-        const luaCode = parseMapToLua(fileContent, excludeModels);
+        luaCodeForDownload = parseMapToLua(fileContent, excludeModels);
 
-        output.textContent = luaCode;
+        output.textContent = luaCodeForDownload;
 
-        // Speichern des Lua-Codes als Blob
-        const blob = new Blob([luaCode], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
-
-        // Download-Link erstellen
-        downloadButton.href = url;
-        downloadButton.download = 'output.lua'; // Der Name der herunterzuladenden Datei
-        downloadButton.style.display = 'inline-block'; // Download-Button anzeigen
+        downloadButton.style.display = 'inline-block';
     };
     reader.readAsText(file);
 }
@@ -41,7 +36,6 @@ function parseMapToLua(mapContent, excludeModels) {
     while ((match = objectPattern.exec(mapContent)) !== null) {
         const model = match[1];
 
-        // Überspringe ausgeschlossene Modelle
         if (excludeModels.has(model)) continue;
 
         const posX = match[2];
@@ -57,10 +51,8 @@ function parseMapToLua(mapContent, excludeModels) {
         modelData[model].push([posX, posY, posZ, rotX, rotY, rotZ]);
     }
 
-    // Modelle nach ID sortieren
     const sortedModels = Object.keys(modelData).sort((a, b) => parseInt(a) - parseInt(b));
 
-    // Lua-Code generieren
     sortedModels.forEach(model => {
         luaCode.push(`    engineStreamingRequestModel(${model})`);
         modelData[model].forEach(coords => {
@@ -74,7 +66,15 @@ function parseMapToLua(mapContent, excludeModels) {
 }
 
 function downloadLua() {
-    // Der Download-Link wird beim Klicken auf den Button ausgelöst
-    const downloadButton = document.getElementById('download-button');
-    downloadButton.click();
+
+    const blob = new Blob([luaCodeForDownload], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'output.lua';  
+    link.click();
+
+    URL.revokeObjectURL(url);
 }
