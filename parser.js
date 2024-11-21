@@ -1,15 +1,11 @@
-let luaCodeForDownload = "";
-
 function parseFile() {
     const fileInput = document.getElementById('file-upload');
     const excludeInput = document.getElementById('exclude-models');
-    const output = document.getElementById('output');
-    const downloadButton = document.getElementById('download-button');
 
     const excludeModels = new Set(excludeInput.value.split(',').map(id => id.trim()));
 
     if (!fileInput.files.length) {
-        alert("Please select a file.");
+        alert("Bitte eine Datei auswählen.");
         return;
     }
 
@@ -18,11 +14,10 @@ function parseFile() {
     const reader = new FileReader();
     reader.onload = function(event) {
         const fileContent = event.target.result;
-        luaCodeForDownload = parseMapToLua(fileContent, excludeModels);
+        const luaCode = parseMapToLua(fileContent, excludeModels);
 
-        output.textContent = luaCodeForDownload;
-
-        downloadButton.style.display = 'inline-block';
+        // Der Lua-Code wird nun direkt zum Download angeboten
+        downloadLua(luaCode);
     };
     reader.readAsText(file);
 }
@@ -36,6 +31,7 @@ function parseMapToLua(mapContent, excludeModels) {
     while ((match = objectPattern.exec(mapContent)) !== null) {
         const model = match[1];
 
+        // Überspringe ausgeschlossene Modelle
         if (excludeModels.has(model)) continue;
 
         const posX = match[2];
@@ -51,8 +47,10 @@ function parseMapToLua(mapContent, excludeModels) {
         modelData[model].push([posX, posY, posZ, rotX, rotY, rotZ]);
     }
 
+    // Modelle nach ID sortieren
     const sortedModels = Object.keys(modelData).sort((a, b) => parseInt(a) - parseInt(b));
 
+    // Lua-Code generieren
     sortedModels.forEach(model => {
         luaCode.push(`    engineStreamingRequestModel(${model})`);
         modelData[model].forEach(coords => {
@@ -65,16 +63,17 @@ function parseMapToLua(mapContent, excludeModels) {
     return luaCode.join("\n");
 }
 
-function downloadLua() {
-
-    const blob = new Blob([luaCodeForDownload], { type: 'text/plain' });
+function downloadLua(luaCode) {
+    // Blob erstellen, um den Lua-Code als Datei anzubieten
+    const blob = new Blob([luaCode], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
 
-
+    // Einen temporären Link für den Download erstellen
     const link = document.createElement('a');
     link.href = url;
-    link.download = 'output.lua';  
-    link.click();
+    link.download = 'output.lua';  // Der Name der herunterzuladenden Datei
+    link.click();  // Den Link "klicken", um den Download auszulösen
 
+    // URL-Objekt aufräumen
     URL.revokeObjectURL(url);
 }
