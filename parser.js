@@ -5,11 +5,12 @@ function parseFile() {
     const excludeModels = new Set(excludeInput.value.split(',').map(id => id.trim()));
 
     if (!fileInput.files.length) {
-        alert("Please choose a map file.");
+        alert("Please select a file.");
         return;
     }
 
     const file = fileInput.files[0];
+    const originalFileName = file.name.replace('.map', '');
 
     const reader = new FileReader();
     reader.onload = function(event) {
@@ -17,7 +18,7 @@ function parseFile() {
         const { luaCode, editedMapContent } = parseMapToLua(fileContent, excludeModels);
 
         // ZIP-Datei erstellen und herunterladen
-        createAndDownloadZip(luaCode, editedMapContent);
+        createAndDownloadZip(luaCode, editedMapContent, originalFileName);
     };
     reader.readAsText(file);
 }
@@ -49,7 +50,7 @@ function parseMapToLua(mapContent, excludeModels) {
 
         // Entfernen der Zeile aus der Map-Datei
         const objectLine = match[0];
-        editedMapContent = editedMapContent.replace(objectLine + '\n', '');
+        editedMapContent = editedMapContent.replace(objectLine, '');
     }
 
     // Modelle nach ID sortieren
@@ -68,14 +69,15 @@ function parseMapToLua(mapContent, excludeModels) {
     return { luaCode: luaCode.join("\n"), editedMapContent };
 }
 
-function createAndDownloadZip(luaCode, editedMapContent) {
+function createAndDownloadZip(luaCode, editedMapContent, originalFileName) {
     const zip = new JSZip();
 
     // Lua-Datei hinzufügen
     zip.file("output.lua", luaCode);
 
-    // Bearbeitete Map-Datei hinzufügen
-    zip.file("edited_map.map", editedMapContent);
+    // Bearbeitete Map-Datei hinzufügen (mit dynamischem Namen)
+    const editedMapName = `${originalFileName}_edited.map`;
+    zip.file(editedMapName, editedMapContent);
 
     // ZIP-Datei generieren und herunterladen
     zip.generateAsync({ type: "blob" })
@@ -87,6 +89,6 @@ function createAndDownloadZip(luaCode, editedMapContent) {
             URL.revokeObjectURL(link.href);
         })
         .catch(function(err) {
-            console.error("Fehler beim Erstellen der ZIP-Datei:", err);
+            console.error("Error while creating the ZIP-File:", err);
         });
 }
