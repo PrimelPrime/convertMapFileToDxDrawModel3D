@@ -2,6 +2,7 @@ function parseFile() {
     const fileInput = document.getElementById('file-upload');
     const excludeInput = document.getElementById('exclude-models');
     const output = document.getElementById('output');
+    const downloadButton = document.getElementById('download-button');
 
     const excludeModels = new Set(excludeInput.value.split(',').map(id => id.trim()));
 
@@ -16,7 +17,17 @@ function parseFile() {
     reader.onload = function(event) {
         const fileContent = event.target.result;
         const luaCode = parseMapToLua(fileContent, excludeModels);
+
         output.textContent = luaCode;
+
+        // Speichern des Lua-Codes als Blob
+        const blob = new Blob([luaCode], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+
+        // Download-Link erstellen
+        downloadButton.href = url;
+        downloadButton.download = 'output.lua'; // Der Name der herunterzuladenden Datei
+        downloadButton.style.display = 'inline-block'; // Download-Button anzeigen
     };
     reader.readAsText(file);
 }
@@ -60,4 +71,10 @@ function parseMapToLua(mapContent, excludeModels) {
     luaCode.push("end)");
 
     return luaCode.join("\n");
+}
+
+function downloadLua() {
+    // Der Download-Link wird beim Klicken auf den Button ausgelöst
+    const downloadButton = document.getElementById('download-button');
+    downloadButton.click();
 }
