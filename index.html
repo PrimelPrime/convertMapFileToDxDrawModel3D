@@ -1,31 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Convert Map File To DxDrawModel3D</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Convert Map File To DxDrawModel3D</h1>
-    
-    <label for="file-upload">Choose a map file:</label>
-    <input type="file" id="file-upload" accept=".map">
-    
-    <br><br>
-    
-    <label for="exclude-models">Exclude models (IDs):</label>
-    <input type="text" id="exclude-models" placeholder="e.g. 8838,8558,3458">
-    
-    <br><br>
-    
-    <button onclick="parseFile()">Convert</button>
+    <div class="container">
+        <h1>Convert Map File To DxDrawModel3D</h1>
 
-    <br><br>
-
-    <button id="download-button" style="display:none" onclick="downloadLua()">Download lua file</button>
-
-    <pre id="output"></pre>
-
+        <div class="form-container">
+            <label for="file-upload">Choose a map file:</label>
+            <input type="file" id="file-upload" accept=".map">
+            
+            <label for="exclude-models">Exclude models (IDs):</label>
+            <input type="text" id="exclude-models" placeholder="e.g. 8838,8558,3458">
+            
+            <button onclick="parseFile()">Convert</button>
+        </div>
+    </div>
+    
     <script src="parser.js"></script>
 </body>
 </html>
