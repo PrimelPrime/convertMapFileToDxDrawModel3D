@@ -2,10 +2,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Convert Map File to DxDrawModel3D</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 500px;
+            margin: auto;
+            text-align: center;
+        }
+        input[type="file"] {
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Convert Map File to DxDrawModel3D</h1>
+    <div class="container">
+        <h1>Dateikonverter</h1>
+        <input type="file" id="fileInput" />
+        <button id="convertButton">Datei konvertieren</button>
+        <div id="output" style="margin-top: 20px;"></div>
+    </div>
+    <script>
+        document.getElementById('convertButton').addEventListener('click', () => {
+            const fileInput = document.getElementById('fileInput');
+            const output = document.getElementById('output');
+
+            if (fileInput.files.length === 0) {
+                output.textContent = "Bitte eine Datei hochladen.";
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(event) {
+                const content = event.target.result;
+
+                
+                const convertedContent = content.toUpperCase();
+
+                
+                const blob = new Blob([convertedContent], { type: 'text/plain' });
+                const downloadLink = document.createElement('a');
+                downloadLink.href = URL.createObjectURL(blob);
+                downloadLink.download = 'converted_file.txt';
+                downloadLink.textContent = 'Konvertierte Datei herunterladen';
+                downloadLink.style.display = 'block';
+
+                output.innerHTML = '';
+                output.appendChild(downloadLink);
+            };
+
+            reader.onerror = function() {
+                output.textContent = "Fehler beim Lesen der Datei.";
+            };
+
+            reader.readAsText(file);
+        });
+    </script>
 </body>
 </html>
