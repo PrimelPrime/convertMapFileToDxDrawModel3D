@@ -5,7 +5,7 @@ function parseFile() {
     const excludeModels = new Set(excludeInput.value.split(',').map(id => id.trim()));
 
     if (!fileInput.files.length) {
-        alert("Bitte eine Datei auswählen.");
+        alert("Please select a file.");
         return;
     }
 
