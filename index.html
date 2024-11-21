@@ -1,67 +1,27 @@
-<html lang="en">
+<!DOCTYPE html>
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Convert Map File to DxDrawModel3D</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        .container {
-            max-width: 500px;
-            margin: auto;
-            text-align: center;
-        }
-        input[type="file"] {
-            margin-bottom: 20px;
-        }
-    </style>
+    <title>File Parser</title>
 </head>
 <body>
-    <div class="container">
-        <h1>Convert Map File to DxDrawModel3D</h1>
-        <input type="file" id="fileInput" />
-        <button id="convertButton">Convert</button>
-        <div id="output" style="margin-top: 20px;"></div>
-    </div>
-    <script>
-        document.getElementById('convertButton').addEventListener('click', () => {
-            const fileInput = document.getElementById('fileInput');
-            const output = document.getElementById('output');
+    <h1>Convert Map File To DxDrawModel3D</h1>
+    
+    <label for="file-upload">Wähle eine Map-Datei:</label>
+    <input type="file" id="file-upload" accept=".map">
+    
+    <br><br>
+    
+    <label for="exclude-models">Modelle ausschließen (IDs, durch Kommas getrennt):</label>
+    <input type="text" id="exclude-models" placeholder="z.B. 8838,8558,3458">
+    
+    <br><br>
+    
+    <button onclick="parseFile()">Datei konvertieren</button>
 
-            if (fileInput.files.length === 0) {
-                output.textContent = "Please upload a file.";
-                return;
-            }
+    <pre id="output"></pre>
 
-            const file = fileInput.files[0];
-            const reader = new FileReader();
-
-            reader.onload = function(event) {
-                const content = event.target.result;
-
-                
-                const convertedContent = content.toUpperCase();
-
-                
-                const blob = new Blob([convertedContent], { type: 'text/plain' });
-                const downloadLink = document.createElement('a');
-                downloadLink.href = URL.createObjectURL(blob);
-                downloadLink.download = 'converted_file.txt';
-                downloadLink.textContent = 'Konvertierte Datei herunterladen';
-                downloadLink.style.display = 'block';
-
-                output.innerHTML = '';
-                output.appendChild(downloadLink);
-            };
-
-            reader.onerror = function() {
-                output.textContent = "Fehler beim Lesen der Datei.";
-            };
-
-            reader.readAsText(file);
-        });
-    </script>
+    <script src="parser.js"></script>
 </body>
 </html>
