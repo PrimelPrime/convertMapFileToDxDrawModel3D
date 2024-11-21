@@ -14,9 +14,10 @@ function parseFile() {
     const reader = new FileReader();
     reader.onload = function(event) {
         const fileContent = event.target.result;
-        const luaCode = parseMapToLua(fileContent, excludeModels);
+        const { luaCode, editedMapContent } = parseMapToLua(fileContent, excludeModels);
 
         downloadLua(luaCode);
+        downloadMap(editedMapContent);
     };
     reader.readAsText(file);
 }
@@ -25,6 +26,7 @@ function parseMapToLua(mapContent, excludeModels) {
     const objectPattern = /<object[^>]*model="(\d+)"[^>]*posX="([^"]+)"[^>]*posY="([^"]+)"[^>]*posZ="([^"]+)"[^>]*rotX="([^"]+)"[^>]*rotY="([^"]+)"[^>]*rotZ="([^"]+)"[^>]*>/g;
     let luaCode = ['addEventHandler("onClientPreRender", root, function()'];
     const modelData = {};
+    let editedMapContent = mapContent;
 
     let match;
     while ((match = objectPattern.exec(mapContent)) !== null) {
@@ -43,6 +45,9 @@ function parseMapToLua(mapContent, excludeModels) {
             modelData[model] = [];
         }
         modelData[model].push([posX, posY, posZ, rotX, rotY, rotZ]);
+
+        const objectLine = match[0];
+        editedMapContent = editedMapContent.replace(objectLine + '\n', '');
     }
 
     const sortedModels = Object.keys(modelData).sort((a, b) => parseInt(a) - parseInt(b));
@@ -56,16 +61,31 @@ function parseMapToLua(mapContent, excludeModels) {
 
     luaCode.push("end)");
 
-    return luaCode.join("\n");
+    return { luaCode: luaCode.join("\n"), editedMapContent };
 }
 
 function downloadLua(luaCode) {
+
     const blob = new Blob([luaCode], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
 
     const link = document.createElement('a');
     link.href = url;
     link.download = 'output.lua';
+    link.click();
+
+
+    URL.revokeObjectURL(url);
+}
+
+function downloadMap(editedMapContent) {
+
+    const blob = new Blob([editedMapContent], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'edited_map.map';
     link.click();
 
     URL.revokeObjectURL(url);
