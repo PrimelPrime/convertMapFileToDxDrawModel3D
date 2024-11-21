@@ -48,10 +48,16 @@ function parseMapToLua(mapContent, excludeModels) {
         }
         modelData[model].push([posX, posY, posZ, rotX, rotY, rotZ]);
 
-        // Entfernen der Zeile aus der Map-Datei
+        // Entfernen der gesamten <object> Zeile aus der Map-Datei
         const objectLine = match[0];
         editedMapContent = editedMapContent.replace(objectLine, '');
     }
+
+    // Entfernen von leeren Zeilen
+    editedMapContent = editedMapContent
+        .split('\n') // Datei in Zeilen aufteilen
+        .filter(line => line.trim() !== '') // Nur nicht-leere Zeilen behalten
+        .join('\n'); // Zeilen wieder zusammensetzen
 
     // Modelle nach ID sortieren
     const sortedModels = Object.keys(modelData).sort((a, b) => parseInt(a) - parseInt(b));
