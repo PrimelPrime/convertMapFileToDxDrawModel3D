@@ -79,7 +79,7 @@ function createAndDownloadZip(luaCode, editedMapContent, originalFileName) {
     const zip = new JSZip();
 
     // Lua-Datei hinzufügen
-    zip.file("output.lua", luaCode);
+    zip.file("DxDrawModel3D.lua", luaCode);
 
     // Bearbeitete Map-Datei hinzufügen (mit dynamischem Namen)
     const editedMapName = `${originalFileName}_edited.map`;
