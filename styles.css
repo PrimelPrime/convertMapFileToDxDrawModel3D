@@ -52,8 +52,14 @@ h2 {
 }
 
 h3 {
+    margin-top: 58px;
     margin-bottom: 30px;
     font-size: 2.5em;
+    color: white;
+}
+
+p {
+	text-align:left;
     color: white;
 }
 
@@ -88,7 +94,7 @@ h3 {
 
 /* Formulareingabefelder */
 input[type="file"], input[type="text"], button {
-    width: 100%;
+    width: 90%;
     padding: 10px;
     margin: 10px 0;
     border: 1px solid #333;
