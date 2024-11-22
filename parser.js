@@ -24,7 +24,7 @@ function parseFile() {
 }
 
 function parseMapToLua(mapContent, excludeModels) {
-    const objectPattern = /<object[^>]*model="(\d+)"[^>]*posX="([^"]+)"[^>]*posY="([^"]+)"[^>]*posZ="([^"]+)"[^>]*rotX="([^"]+)"[^>]*rotY="([^"]+)"[^>]*rotZ="([^"]+)"[^>]*><\/object>/g;
+    const objectPattern = /<object[^>]*model="(\d+)"[^>]*posX="([^"]+)"[^>]*posY="([^"]+)"[^>]*posZ="([^"]+)"[^>]*rotX="([^"]+)"[^>]*rotY="([^"]+)"[^>]*rotZ="([^"]+)"[^>]*scale="([^"]+)"[^>]*><\/object>/g;
     let luaCode = ['addEventHandler("onClientPreRender", root, function()'];
     const modelData = {};
     let editedMapContent = mapContent;
