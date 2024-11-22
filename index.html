@@ -7,32 +7,40 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="flex-container">
-        <div class="container">
-            <h1>Convert Map File To DxDrawModel3D</h1>
-    
-            <div class="form-container">
-                <label for="file-upload">Choose a map file:</label>
-                <input type="file" id="file-upload" accept=".map">
-                
-                <label for="exclude-models">Exclude models (IDs):</label>
-                <input type="text" id="exclude-models" placeholder="e.g. 8838,8558,3458">
-                
-                <button onclick="parseFile()">Convert</button>
+    <div class="flex-main-container">
+        <div class="info-container">
+            <h3>Information</h3>
+            <div class="form-info-container">
+                <p>Test</p>
             </div>
         </div>
-        <div class="box">
-            <h2>Exclude model groups</h2>
-            
-            <div class="from-box">
-                <input type="checkbox" id="exclude-trees" name="exclude-trees">
-                <label for="exclude-trees">Trees and vegetation</label>
-    
-                <input type="checkbox" id="exclude-buildings" name="exclude-buildings">
-                <label for="exclude-buildings">Lights</label>
-    
-                <input type="checkbox" id="exclude-other" name="exclude-other">
-                <label for="exclude-other">Alpha channels</label>
+        <div class="flex-container">
+            <div class="container">
+                <h1>Convert Map File To DxDrawModel3D</h1>
+        
+                <div class="form-container">
+                    <label for="file-upload">Choose a map file:</label>
+                    <input type="file" id="file-upload" accept=".map">
+                    
+                    <label for="exclude-models">Exclude models (IDs):</label>
+                    <input type="text" id="exclude-models" placeholder="e.g. 8838,8558,3458">
+                    
+                    <button onclick="parseFile()">Convert</button>
+                </div>
+            </div>
+            <div class="box">
+                <h2>Exclude model groups</h2>
+                
+                <div class="from-box">
+                    <input type="checkbox" id="exclude-trees" name="exclude-trees">
+                    <label for="exclude-trees">Trees and vegetation</label>
+        
+                    <input type="checkbox" id="exclude-buildings" name="exclude-buildings">
+                    <label for="exclude-buildings">Lights</label>
+        
+                    <input type="checkbox" id="exclude-other" name="exclude-other">
+                    <label for="exclude-other">Alpha channels</label>
+                </div>
             </div>
         </div>
     </div>
