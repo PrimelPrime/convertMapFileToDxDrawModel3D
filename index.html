@@ -20,6 +20,22 @@
             <button onclick="parseFile()">Convert</button>
         </div>
     </div>
+    <div class="box">
+        <h2>Exclude model groups</h2>
+        <div>
+            <input type="checkbox" id="exclude-trees" name="exclude-trees">
+            <label for="exclude-trees">Trees and vegetation</label>
+        </div>
+        <div>
+            <input type="checkbox" id="exclude-buildings" name="exclude-buildings">
+            <label for="exclude-buildings">Lights</label>
+        </div>
+        <div>
+            <input type="checkbox" id="exclude-other" name="exclude-other">
+            <label for="exclude-other">Alpha channels</label>
+        </div>
+    </div>
+
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="parser.js"></script>
