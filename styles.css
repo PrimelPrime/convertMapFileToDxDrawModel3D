@@ -16,6 +16,12 @@ body {
     text-align: center;
 }
 
+.flex-container {
+    display: flex;
+    margin: auto;
+    padding: 30px;
+}
+
 .box {
     text-align: center;
 }
@@ -29,7 +35,7 @@ h1 {
 
 h2 {
     margin-bottom: 60px;
-    font-size: 0.5em;
+    font-size: 1.5em;
     color: white;
 }
 
