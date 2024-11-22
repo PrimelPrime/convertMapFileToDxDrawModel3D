@@ -42,11 +42,12 @@ function parseMapToLua(mapContent, excludeModels) {
         const rotX = match[5];
         const rotY = match[6];
         const rotZ = match[7];
+        const scale = match[8];
 
         if (!modelData[model]) {
             modelData[model] = [];
         }
-        modelData[model].push([posX, posY, posZ, rotX, rotY, rotZ]);
+        modelData[model].push([posX, posY, posZ, rotX, rotY, rotZ, scale, scale, scale]);
 
         // Entfernen der gesamten <object> Zeile aus der Map-Datei
         const objectLine = match[0];
