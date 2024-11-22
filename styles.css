@@ -11,9 +11,19 @@ body {
     height: 100vh;
 }
 
-/* Container für den Inhalt */
+.flex-main-container {
+    display:flex;
+    flex-direction: row;
+    margin: auto;
+    padding: 30px;
+}
+
 .container {
     text-align: center;
+}
+
+.info-container {
+    text-algin: center;
 }
 
 .flex-container {
@@ -59,6 +69,16 @@ h2 {
     max-width: 400px;
     margin: 0 auto;
 }
+
+.form-info-container {
+    background-color: rgba(28, 28, 60, 0.8);
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    max-width: 400px;
+    margin: 0 auto;
+}
+
 
 /* Formulareingabefelder */
 input[type="file"], input[type="text"], button {
