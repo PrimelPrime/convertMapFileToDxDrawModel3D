@@ -24,7 +24,7 @@ function parseFile() {
 }
 
 function parseMapToLua(mapContent, excludeModels) {
-    const objectPattern = /<object[^>]*model="(\d+)"[^>]*posX="([^"]+)"[^>]*posY="([^"]+)"[^>]*posZ="([^"]+)"[^>]*rotX="([^"]+)"[^>]*rotY="([^"]+)"[^>]*rotZ="([^"]+)"[^>]*scale="([^"]+)"[^>]*><\/object>/g;
+    const objectPattern = /<object[^>]*model="(\d+)"[^>]*scale="([^"]+)"[^>]*posX="([^"]+)"[^>]*posY="([^"]+)"[^>]*posZ="([^"]+)"[^>]*rotX="([^"]+)"[^>]*rotY="([^"]+)"[^>]*rotZ="([^"]+)"[^>]*><\/object>/g;
     let luaCode = ['addEventHandler("onClientPreRender", root, function()'];
     const modelData = {};
     let editedMapContent = mapContent;
@@ -36,13 +36,13 @@ function parseMapToLua(mapContent, excludeModels) {
         // Überspringe ausgeschlossene Modelle
         if (excludeModels.has(model)) continue;
 
-        const posX = match[2];
-        const posY = match[3];
-        const posZ = match[4];
-        const rotX = match[5];
-        const rotY = match[6];
-        const rotZ = match[7];
-        const scale = match[8];
+        const scale = match[2];
+        const posX = match[3];
+        const posY = match[4];
+        const posZ = match[5];
+        const rotX = match[6];
+        const rotY = match[7];
+        const rotZ = match[8];
 
         if (!modelData[model]) {
             modelData[model] = [];
