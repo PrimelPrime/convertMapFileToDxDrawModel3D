@@ -40,8 +40,8 @@ function parseMapToLua(mapContent, excludeModels) {
         const posX = match[3];
         const posY = match[4];
         const posZ = match[5];
-        const rotX = match[6];
-        const rotY = match[7];
+        const rotY = match[6];
+        const rotX = match[7];
         const rotZ = match[8];
 
         if (!modelData[model]) {
