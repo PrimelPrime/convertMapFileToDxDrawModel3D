@@ -65,7 +65,7 @@ function parseMapToLua(mapContent, excludeModels) {
 
     // Lua-Code generieren
     sortedModels.forEach(model => {
-        luaCode.push(`    engineStreamingRequestModel(${model})`);
+        luaCode.push(`    engineStreamingRequestModel(${model}, true)`);
         modelData[model].forEach(coords => {
             luaCode.push(`    dxDrawModel3D(${model}, ${coords.join(', ')})`);
         });
